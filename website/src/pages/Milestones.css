@@ -1,0 +1,194 @@
+/* Milestones.css */
+.milestones-page {
+  padding: 4rem 0 6rem;
+  min-height: 80vh;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.dropdown-container {
+  max-width: 500px;
+  margin: 0 auto 3rem;
+  text-align: center;
+}
+
+.dropdown-label {
+  display: block;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+}
+
+.custom-select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.custom-select {
+  width: 100%;
+  appearance: none;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  padding: 1rem 1.5rem;
+  font-size: 1.1rem;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+  backdrop-filter: blur(10px);
+  transition: all var(--transition-fast);
+}
+
+.custom-select:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.custom-select option {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.select-icon {
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--text-secondary);
+}
+
+.milestone-details {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+  border-top: 4px solid var(--accent-primary);
+}
+
+.milestone-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.milestone-details h2 {
+  font-size: 2rem;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.icon-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.edit-btn:hover {
+  background: var(--accent-primary);
+  color: white;
+  border-color: var(--accent-primary);
+  transform: scale(1.05);
+}
+
+.milestone-desc {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.milestone-meta {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1.5rem;
+  border-radius: var(--border-radius-sm);
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-align: left;
+}
+
+.meta-icon {
+  color: var(--accent-primary);
+  width: 32px;
+  height: 32px;
+}
+
+.meta-label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.25rem;
+}
+
+.meta-value {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.meta-content {
+  flex-grow: 1;
+}
+
+.edit-input {
+  width: 100%;
+  max-width: 200px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--accent-primary);
+  color: white;
+  padding: 0.5rem 0.8rem;
+  border-radius: var(--border-radius-sm);
+  font-size: 1rem;
+  font-family: inherit;
+  outline: none;
+}
+
+.edit-input:focus {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+.edit-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px dashed var(--glass-border);
+}
+
+.edit-actions .btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.2rem;
+}
+
+@media (max-width: 600px) {
+  .milestone-meta {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
