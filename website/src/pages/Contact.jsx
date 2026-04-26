@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, MapPin, Copy, CheckCircle2, UserCircle } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 import './Contact.css';
 
 const team = [
@@ -35,6 +36,18 @@ const Contact = () => {
   const [copied, setCopied] = useState(false);
   const [selectedMember, setSelectedMember] = useState(team[0]);
   const [templateText, setTemplateText] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
+  const [isSending, setIsSending] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState({ type: '', text: '' });
+
+  const emailJsServiceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+  const emailJsTemplateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+  const emailJsPublicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
   // Update template whenever selected member changes
   useEffect(() => {
@@ -51,6 +64,57 @@ const Contact = () => {
     const member = team.find(m => m.name === e.target.value);
     if (member) {
       setSelectedMember(member);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!emailJsServiceId || !emailJsTemplateId || !emailJsPublicKey) {
+      setSubmitMessage({
+        type: 'error',
+        text: 'Email is not configured yet. Please set EmailJS environment variables.'
+      });
+      return;
+    }
+
+    setIsSending(true);
+    setSubmitMessage({ type: '', text: '' });
+
+    try {
+      await emailjs.send(
+        emailJsServiceId,
+        emailJsTemplateId,
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+          to_name: selectedMember.name,
+          to_email: selectedMember.email,
+          recipient_salutation: selectedMember.salutation
+        },
+        emailJsPublicKey
+      );
+
+      setSubmitMessage({
+        type: 'success',
+        text: `Email sent successfully to ${selectedMember.name}.`
+      });
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (error) {
+      setSubmitMessage({
+        type: 'error',
+        text: 'Failed to send email. Please try again in a moment.'
+      });
+      console.error('EmailJS send failed:', error);
+    } finally {
+      setIsSending(false);
     }
   };
 
@@ -140,29 +204,67 @@ const Contact = () => {
             transition={{ duration: 0.5, delay: 0.3 }}
           >
             <h3>Send a Message to {selectedMember.name.split(' ')[0]}</h3>
-            <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
+            <form className="contact-form" onSubmit={handleSubmit}>
               <div className="form-group">
                 <label htmlFor="name">Your Name</label>
-                <input type="text" id="name" placeholder="John Doe" className="form-input" required />
+                <input
+                  type="text"
+                  id="name"
+                  placeholder="John Doe"
+                  className="form-input"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                />
               </div>
 
               <div className="form-group">
                 <label htmlFor="email">Your Email</label>
-                <input type="email" id="email" placeholder="john@example.com" className="form-input" required />
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="john@example.com"
+                  className="form-input"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                />
               </div>
 
               <div className="form-group">
                 <label htmlFor="subject">Subject</label>
-                <input type="text" id="subject" placeholder="Inquiry about SSMS" className="form-input" required />
+                <input
+                  type="text"
+                  id="subject"
+                  placeholder="Inquiry about SSMS"
+                  className="form-input"
+                  value={formData.subject}
+                  onChange={handleInputChange}
+                  required
+                />
               </div>
 
               <div className="form-group">
                 <label htmlFor="message">Message</label>
-                <textarea id="message" rows="5" placeholder={`Dear ${selectedMember.salutation}, \nHow can we help you?`} className="form-input" required></textarea>
+                <textarea
+                  id="message"
+                  rows="5"
+                  placeholder={`Dear ${selectedMember.salutation}, \nHow can we help you?`}
+                  className="form-input"
+                  value={formData.message}
+                  onChange={handleInputChange}
+                  required
+                ></textarea>
               </div>
 
-              <button type="submit" className="btn btn-primary submit-btn">
-                Send Message
+              {submitMessage.text ? (
+                <p className={`submit-message ${submitMessage.type === 'success' ? 'success' : 'error'}`}>
+                  {submitMessage.text}
+                </p>
+              ) : null}
+
+              <button type="submit" className="btn btn-primary submit-btn" disabled={isSending}>
+                {isSending ? 'Sending...' : 'Send Message'}
               </button>
             </form>
           </motion.div>

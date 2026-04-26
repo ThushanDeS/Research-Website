@@ -145,6 +145,26 @@
   font-size: 1.05rem;
 }
 
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.submit-message {
+  margin-top: 0.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.submit-message.success {
+  color: #34d399;
+}
+
+.submit-message.error {
+  color: #f87171;
+}
+
 @media (max-width: 868px) {
   .contact-container {
     grid-template-columns: 1fr;
