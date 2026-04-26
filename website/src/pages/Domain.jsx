@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, AlertCircle, Target, GitMerge, Cpu, AlertTriangle, ChevronRight, Server, Database, Activity, Eye, Users, Camera, Zap } from 'lucide-react';
+import { BookOpen, AlertCircle, Target, GitMerge, Cpu, AlertTriangle, ChevronRight, Server, Database, Activity, Eye, Users, Camera, Zap, Search } from 'lucide-react';
 import './Domain.css';
 
 const Domain = () => {
   const [activeSection, setActiveSection] = useState('literature');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const navItems = [
     { id: 'literature', label: 'Literature Survey', icon: BookOpen },
@@ -14,6 +15,10 @@ const Domain = () => {
     { id: 'methodology', label: 'Methodology', icon: GitMerge },
     { id: 'technologies', label: 'Technologies Used', icon: Cpu },
   ];
+
+  const filteredNavItems = navItems.filter((item) =>
+    item.label.toLowerCase().includes(searchTerm.trim().toLowerCase())
+  );
 
   // Simple scrollspy to highlight active section in sidebar
   useEffect(() => {
@@ -60,8 +65,19 @@ const Domain = () => {
           <aside className="domain-sidebar">
             <div className="glass-card sidebar-nav">
               <h3 className="sidebar-title">Contents</h3>
+              <div className="domain-search-wrap">
+                <Search size={16} className="domain-search-icon" />
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search section..."
+                  className="domain-search-input"
+                  aria-label="Search domain sections"
+                />
+              </div>
               <ul className="nav-list">
-                {navItems.map((item) => (
+                {filteredNavItems.map((item) => (
                   <li key={item.id}>
                     <button
                       className={`nav-button ${activeSection === item.id ? 'active' : ''}`}
@@ -73,6 +89,9 @@ const Domain = () => {
                     </button>
                   </li>
                 ))}
+                {!filteredNavItems.length ? (
+                  <li className="nav-empty-state">No matching section</li>
+                ) : null}
               </ul>
             </div>
           </aside>
